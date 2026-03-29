@@ -5,6 +5,7 @@ from unittest import mock
 
 import contact.ui.default_config as config
 from contact.utilities import i18n
+from contact.utilities.ini_utils import parse_ini_file
 
 from tests.test_support import restore_config, snapshot_config
 
@@ -55,3 +56,19 @@ class I18nTests(unittest.TestCase):
             config.language = "ru"
             self.assertEqual(i18n.t("missing", default="fallback"), "fallback")
             self.assertEqual(parse_ini_file.call_count, 2)
+
+    def test_bot_ui_translation_keys_exist_in_all_locales(self) -> None:
+        required_keys = {
+            "ui.help.bot_responder",
+            "ui.bot.status.enabled",
+            "ui.bot.status.disabled",
+            "ui.bot.dialog.title",
+            "ui.bot.dialog.body",
+            "ui.bot.status.message",
+            "ui.bot.catch_words",
+            "ui.bot.response.word",
+        }
+
+        for language in config.get_localisation_options():
+            field_mapping, _ = parse_ini_file(config.get_localisation_file(language))
+            self.assertTrue(required_keys.issubset(field_mapping), msg=f"Missing bot translation keys in {language}")

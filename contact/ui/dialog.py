@@ -2,7 +2,7 @@ import curses
 
 from contact.utilities.i18n import t_text
 from contact.ui.colors import get_color
-from contact.ui.nav_utils import draw_main_arrows
+from contact.ui.nav_utils import draw_main_arrows, slice_to_width, text_width
 from contact.utilities.singleton import menu_state, ui_state
 
 
@@ -19,10 +19,10 @@ def dialog(title: str, message: str) -> None:
 
     # Parse message into lines and calculate dimensions
     message_lines = message.splitlines() or [""]
-    max_line_length = max(len(l) for l in message_lines)
+    max_line_length = max(text_width(l) for l in message_lines)
 
     # Desired size
-    dialog_width = max(len(title) + 4, max_line_length + 4)
+    dialog_width = max(text_width(title) + 4, max_line_length + 4)
     desired_height = len(message_lines) + 4
 
     # Clamp dialog size to the screen (leave a 1-cell margin if possible)
@@ -61,7 +61,7 @@ def dialog(title: str, message: str) -> None:
 
         # Title
         try:
-            win.addstr(0, 2, title[: max(0, dialog_width - 4)], get_color("settings_default"))
+            win.addstr(0, 2, slice_to_width(title, max(0, dialog_width - 4)), get_color("settings_default"))
         except curses.error:
             pass
 
@@ -80,9 +80,8 @@ def dialog(title: str, message: str) -> None:
             if idx >= len(message_lines):
                 break
             line = message_lines[idx]
-            # Hard-trim lines that don't fit
-            trimmed = line[: max(0, dialog_width - 6)]
-            msg_x = max(0, ((dialog_width - 2) - len(trimmed)) // 2)
+            trimmed = slice_to_width(line, max(0, dialog_width - 4))
+            msg_x = max(0, ((dialog_width - 2) - text_width(trimmed)) // 2)
             try:
                 msg_win.addstr(1 + i, msg_x, trimmed, get_color("settings_default"))
             except curses.error:

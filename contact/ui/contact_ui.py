@@ -937,14 +937,14 @@ def handle_ctrl_k(stdscr: curses.window) -> None:
 def handle_ctrl_b(stdscr: curses.window) -> None:
     """Handle Ctrl + B key events to toggle automatic bot responses."""
     ui_state.bot_mode_enabled = not ui_state.bot_mode_enabled
-    status = t("ui.status.enabled", default="Enabled") if ui_state.bot_mode_enabled else t(
-        "ui.status.disabled", default="Disabled"
+    status = t("ui.bot.status.enabled", default="Enabled") if ui_state.bot_mode_enabled else t(
+        "ui.bot.status.disabled", default="Disabled"
     )
 
     curses.curs_set(0)
     contact.ui.dialog.dialog(
-        t("ui.dialog.bot_responder_title", default="Bot Responder"),
-        t("ui.dialog.bot_responder_body", default="Bot responder is now {status}.", status=status),
+        t("ui.bot.dialog.title", default="Bot Responder"),
+        t("ui.bot.dialog.body", default="Bot responder is now {status}.", status=status),
     )
 
     if ui_state.channel_list:
@@ -952,7 +952,7 @@ def handle_ctrl_b(stdscr: curses.window) -> None:
         add_new_message(
             channel_id,
             f"{config.message_prefix} Info: ",
-            t("ui.status.bot_mode", default="Bot responder is now {status}.", status=status.lower()),
+            t("ui.bot.status.message", default="Bot responder is now {status}.", status=status.lower()),
         )
         draw_messages_window(True)
 
