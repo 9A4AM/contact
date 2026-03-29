@@ -60,6 +60,7 @@ from contact.utilities.db_handler import (
 import contact.ui.default_config as config
 
 from contact.utilities.singleton import ui_state, interface_state, app_state, menu_state
+from contact.message_handlers.bot_handler import bot_respond
 
 
 def play_sound():
@@ -167,6 +168,8 @@ def on_receive(packet: Dict[str, Any], interface: Any) -> None:
                         refresh_channels = True
 
                     channel_number = ui_state.channel_list.index(packet["from"])
+
+                bot_respond(packet, message_string, channel_number)
 
                 channel_id = ui_state.channel_list[channel_number]
 
