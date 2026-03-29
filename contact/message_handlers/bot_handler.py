@@ -4,15 +4,15 @@ import threading
 import time
 from typing import Any, Dict
 
+import contact.ui.default_config as config
 from contact.utilities.singleton import app_state, interface_state, ui_state
 from contact.message_handlers.tx_handler import send_message
-from contact.utilities.i18n import t
 
 BOT_RESPONSE_DELAY_SECONDS = 2.3
 
 def _get_bot_catch_words() -> set[str]:
-    """Return normalized bot trigger words from localisation settings."""
-    raw_words = t("ui.bot.catch_words", default="ping")
+    """Return normalized bot trigger words from app settings."""
+    raw_words = getattr(config, "ping_bot_catch_words", "ping; test")
     words = {
         word.strip().casefold()
         for word in raw_words.replace(";", ",").split(",")
@@ -60,7 +60,7 @@ def bot_respond(packet: Dict[str, Any], message: str, send_channel: int) -> bool
         if transport_name in transport_text:
             details.append(f"Via: {transport_name}")
 
-    response_data_string = t("ui.bot.response.word", default="Pong!")
+    response_data_string = getattr(config, "ping_bot_response_word", "Pong!")
     if details:
         response_data_string += f" {', '.join(details)}"
 

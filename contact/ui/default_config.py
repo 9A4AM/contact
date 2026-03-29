@@ -238,6 +238,10 @@ def initialize_config() -> Dict[str, object]:
         "ack_unknown_str": "[…]",
         "node_sort": "lastHeard",
         "theme": "dark",
+        "ping_bot": {
+            "catch_words": "ping; test",
+            "response_word": "Pong!",
+        },
         "COLOR_CONFIG_DARK": COLOR_CONFIG_DARK,
         "COLOR_CONFIG_LIGHT": COLOR_CONFIG_LIGHT,
         "COLOR_CONFIG_GREEN": COLOR_CONFIG_GREEN,
@@ -272,7 +276,7 @@ def assign_config_variables(loaded_config: Dict[str, object]) -> None:
     global notification_symbol, ack_implicit_str, ack_str, nak_str, ack_unknown_str
     global node_list_16ths, channel_list_16ths, single_pane_mode
     global theme, COLOR_CONFIG, language
-    global node_sort, notification_sound
+    global node_sort, notification_sound, ping_bot_catch_words, ping_bot_response_word
 
     channel_list_16ths = loaded_config["channel_list_16ths"]
     node_list_16ths = loaded_config["node_list_16ths"]
@@ -291,6 +295,9 @@ def assign_config_variables(loaded_config: Dict[str, object]) -> None:
     ack_unknown_str = loaded_config["ack_unknown_str"]
     node_sort = loaded_config["node_sort"]
     theme = loaded_config["theme"]
+    ping_bot = loaded_config.get("ping_bot", {})
+    ping_bot_catch_words = ping_bot.get("catch_words", "ping; test")
+    ping_bot_response_word = ping_bot.get("response_word", "Pong!")
     if theme == "dark":
         COLOR_CONFIG = loaded_config["COLOR_CONFIG_DARK"]
     elif theme == "light":

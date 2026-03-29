@@ -65,8 +65,9 @@ class I18nTests(unittest.TestCase):
             "ui.bot.dialog.title",
             "ui.bot.dialog.body",
             "ui.bot.status.message",
-            "ui.bot.catch_words",
-            "ui.bot.response.word",
+            "app_settings.ping_bot",
+            "app_settings.ping_bot.catch_words",
+            "app_settings.ping_bot.response_word",
         }
 
         for language in config.get_localisation_options():

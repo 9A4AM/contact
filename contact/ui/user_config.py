@@ -309,7 +309,10 @@ def display_menu() -> tuple[Any, Any, List[str]]:
         else:
             display_key = key
         display_key = f"{display_key}"[: w // 2 - 2]
-        display_value = f"{value}"[: w // 2 - 8]
+        if isinstance(value, dict) or (isinstance(value, list) and len(value) != 2):
+            display_value = ">"
+        else:
+            display_value = f"{value}"[: w // 2 - 8]
 
         color = get_color("settings_default", reverse=(idx == menu_state.selected_index))
         menu_pad.addstr(idx, 0, f"{display_key:<{w // 2 - 2}} {display_value}".ljust(w - 8), color)
